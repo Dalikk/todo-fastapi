@@ -6,7 +6,6 @@ class TodoBase(BaseModel):
     title: str
     description: str | None = None
     done: bool = False
-    created_at: str = datetime.utcnow()
 
 
 class TodoCreate(TodoBase):
@@ -15,6 +14,7 @@ class TodoCreate(TodoBase):
 
 class Todo(TodoBase):
     id: int
+    created_at: datetime
 
     class Config:
         orm_mode = True

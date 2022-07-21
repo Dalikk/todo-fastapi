@@ -1,4 +1,6 @@
 from fastapi import FastAPI
+from datetime import datetime
+
 from . import schemas
 app = FastAPI()
 
@@ -28,3 +30,11 @@ async def main(skip: int = 0, limit: int = 10):
 async def read_todo(todo_id: int):
     index = next(filter(lambda todo: todo.get("id") == todo_id, todos))
     return index
+
+
+@app.post('/todos/', response_model=schemas.Todo)
+async def create_todo(todo: schemas.TodoCreate):
+    new_todo = schemas.Todo(**todo.dict(), created_at=datetime.utcnow(), id=3)
+    todos.append(new_todo)
+    return new_todo
+
