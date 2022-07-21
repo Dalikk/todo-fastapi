@@ -22,3 +22,9 @@ todos = [
 @app.get('/todos/', response_model=list[schemas.Todo])
 async def main(skip: int = 0, limit: int = 10):
     return todos[skip:limit]
+
+
+@app.get('/todos/{todo_id}', response_model=schemas.Todo)
+async def read_todo(todo_id: int):
+    index = next(filter(lambda todo: todo.get("id") == todo_id, todos))
+    return index
