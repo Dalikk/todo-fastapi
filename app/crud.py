@@ -3,6 +3,10 @@ from sqlalchemy.orm import Session
 from . import models, schemas
 
 
+def get_user(db: Session, username: str):
+    return db.query(models.User).filter_by(username=username).first()
+
+
 def get_todo(db: Session, todo_id: int):
     return db.query(models.Todo).filter_by(id=todo_id).first()
 

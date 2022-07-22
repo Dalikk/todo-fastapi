@@ -19,6 +19,10 @@ class User(UserBase):
         orm_mode = True
 
 
+class UserInDB(User):
+    hashed_password: str
+
+
 class TodoBase(BaseModel):
     title: str
     description: str | None = None
@@ -35,3 +39,12 @@ class Todo(TodoBase):
 
     class Config:
         orm_mode = True
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    username: str | None = None
