@@ -48,6 +48,12 @@ def read_user(username: str, db: Session = Depends(get_db)):
     return user
 
 
+@app.post('/users/', response_model=schemas.User)
+def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
+    user_db = crud.create_user(db=db, user=user)
+    return user_db
+
+
 @app.get('/todos/', response_model=list[schemas.Todo])
 async def read_todos(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     db_todos = crud.get_todos(db, skip, limit)
