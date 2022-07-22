@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Depends, HTTPException
+from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 from datetime import datetime
 
@@ -18,8 +19,13 @@ def get_db():
         db.close()
 
 
+@app.get('/')
+async def root():
+    return RedirectResponse('/docs')
+
+
 @app.get('/todos/', response_model=list[schemas.Todo])
-async def main(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+async def read_todos(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     db_todos = crud.get_todos(db, skip, limit)
     return db_todos
 
