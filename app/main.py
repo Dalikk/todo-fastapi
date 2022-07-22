@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi import FastAPI, Depends, HTTPException, status, Form
 from fastapi.responses import RedirectResponse
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
@@ -38,6 +38,14 @@ async def read_user_me(current_user: schemas.User = Depends(get_current_active_u
     if current_user.disabled:
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user
+
+
+@app.get('/users/{username}', response_model=schemas.User)
+def read_user(username: str, db: Session = Depends(get_db)):
+    user = crud.get_user(db=db, username=username)
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    return user
 
 
 @app.get('/todos/', response_model=list[schemas.Todo])
