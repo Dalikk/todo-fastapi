@@ -72,8 +72,12 @@ async def read_todo(todo_id: int, db: Session = Depends(get_db)):
 
 
 @app.post('/todos/', response_model=schemas.Todo)
-async def create_todo(todo: schemas.TodoCreate, db: Session = Depends(get_db)):
-    return crud.create_todo(db=db, todo=todo)
+async def create_todo(
+        todo: schemas.TodoCreate,
+        db: Session = Depends(get_db),
+        current_user=Depends(get_current_active_user)
+):
+    return crud.create_todo(db=db, todo=todo, user_id=current_user.id)
 
 
 @app.get('/secret-route/')
