@@ -75,3 +75,8 @@ async def read_todo(todo_id: int, db: Session = Depends(get_db)):
 async def create_todo(todo: schemas.TodoCreate, db: Session = Depends(get_db)):
     return crud.create_todo(db=db, todo=todo)
 
+
+@app.get('/secret-route/')
+def get_secret_route(current_user=Depends(get_current_active_user)):
+    return {"message": "you are in private route"}
+
