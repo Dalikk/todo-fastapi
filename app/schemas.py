@@ -33,10 +33,13 @@ class UserCreate(UserBase):
 class User(UserBase):
     id: int
     disabled: bool
-    todos: list[Todo] = []
 
     class Config:
         orm_mode = True
+
+
+class UserWithTodos(User):
+    todos: list[Todo] = []
 
 
 class UserInDB(User):

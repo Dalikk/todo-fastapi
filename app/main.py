@@ -33,6 +33,12 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db:
     return {"access_token": access_token, "token_type": "bearer"}
 
 
+@app.get('/users/', response_model=list[schemas.User])
+def read_users(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    db_users = crud.get_users(db=db, skip=skip, limit=limit)
+    return db_users
+
+
 @app.get('/users/me', response_model=schemas.User)
 async def read_user_me(current_user: schemas.User = Depends(get_current_active_user)):
     if current_user.disabled:
@@ -52,6 +58,11 @@ def read_user(username: str, db: Session = Depends(get_db)):
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     user_db = crud.create_user(db=db, user=user)
     return user_db
+
+
+# @app.get('/user/todos')
+# def read_user_todos(current_user: Depends(get_current_active_user)):
+#     pass
 
 
 @app.get('/todos/', response_model=list[schemas.Todo])

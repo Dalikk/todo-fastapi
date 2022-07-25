@@ -4,6 +4,11 @@ from . import models, schemas
 from .utils.auth import get_password_hash
 
 
+def get_users(db: Session, skip: int, limit: int):
+    users = db.query(models.User).offset(skip).limit(limit).all()
+    return users
+
+
 def get_user(db: Session, username: str):
     return db.query(models.User).filter_by(username=username).first()
 
@@ -27,6 +32,10 @@ def get_todo(db: Session, todo_id: int):
 
 def get_todos(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Todo).offset(skip).limit(limit).all()
+
+
+def get_user_todos(db: Session, user: models.User):
+    user_todos = user.todos.all()
 
 
 def create_todo(db: Session, todo: schemas.TodoCreate, user_id: int):
